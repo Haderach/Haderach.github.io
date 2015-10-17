@@ -27,8 +27,39 @@
 
       </header>
       <section>
-        <div class="highlight highlight-source-c"><pre><span class="pl-k">void</span> <span class="pl-en">main</span>()
-{}</pre></div>
+        <h3>
+<a id="executable-library" class="anchor" href="#executable-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Executable library</h3>
+
+<p>So, finally my first record here, on <em>gh-pages</em>. I still think it could be quite<br>
+useful to write this posts in english (u know, i'm not a native speaker).<br>
+Well, this post will probably be not that so informative, but any way let's write it.</p>
+
+<p>To make your <em>.so</em>-object executable you need simply do the following :</p>
+
+<ul>
+<li>Define a path to your system ld-linux.so</li>
+<li>Target an entry point of your library with -Wl,-e</li>
+</ul>
+
+<p>This simple code (let's call it executable_so) do the job</p>
+
+<div class="highlight highlight-source-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>unistd.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">const</span> <span class="pl-k">char</span> interp[] __attribute__((section(<span class="pl-s"><span class="pl-pds">"</span>.interp<span class="pl-pds">"</span></span>))) = <span class="pl-s"><span class="pl-pds">"</span>path-to-your-ld-linux.so<span class="pl-pds">"</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">entry</span>()
+{
+    <span class="pl-c1">_exit</span>(<span class="pl-c1">0</span>);
+}</pre></div>
+
+<p>Often ld-linux could be found at <em>/lib</em></p>
+
+<p>Next you should compile it with</p>
+
+<div class="highlight highlight-source-makefile"><pre>gcc -Wall -fPIC -shared -o test.so executable_so.c -lc -Wl,-e,entry</pre></div>
+
+<p>That's it - first simple post here about boring stuff, which could be useful<br>
+one day.</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
